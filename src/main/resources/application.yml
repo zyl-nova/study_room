@@ -36,6 +36,16 @@ spring:
         converters:
           preferred-json-mapper: jackson
 
+
+# 添加（或合并）以下 actuator 配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+# 可选：保持 actuator 在同一端口（默认），不设置 management.server.port
+# 如果你想显示更多信息，可加：management.endpoint.health.show-details=always
+
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
