@@ -47,6 +47,12 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+
+		<!-- 添加到 <dependencies> 节点内，与其他 spring 依赖同级 -->
+		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		
 		<dependency>
 		    <groupId>mysql</groupId>
