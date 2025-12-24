@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dao.YuyuexinxiDao">
 
-    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.entity.YuyuexinxiEntity" id="yuyuexinxiMap">
         <result property="yuyuedanhao" column="yuyuedanhao"/>
         <result property="mingcheng" column="mingcheng"/>
@@ -19,19 +19,53 @@
         <result property="shhf" column="shhf"/>
     </resultMap>
 
+    <!-- 统计同一自习室 + 座位在请求时间段是否有冲突 -->
+    <select id="countSeatConflict" resultType="int" parameterType="map"><![CDATA[
+        SELECT COUNT(1)
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+          -- 时间区间重合判断：已有预约的开始 < 新预约结束 && 已有预约的结束 > 新预约开始
+          AND yuyue_start < #{yuyueEnd}
+          AND yuyue_end > #{yuyueStart}
+        ]]></select>
 
-    <select id="selectListView"
-            resultType="com.entity.view.YuyuexinxiView">
+    <!-- 查询指定座位的已预约时段 -->
+    <select id="selectSeatYuyueList" resultType="com.entity.YuyuexinxiEntity" parameterType="map"><![CDATA[
+        SELECT *
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+        ORDER BY yuyue_start
+        ]]></select>
 
+    <!-- 查询指定日期的预约单最大流水号（示例假设 yuyuedanhao 以 dateStr 开头，后跟流水） -->
+    <select id="getMaxYuyueSeqByDate" resultType="int" parameterType="string"><![CDATA[
+        SELECT COALESCE(MAX(CAST(SUBSTRING(yuyuedanhao, LENGTH(#{dateStr})+1) AS UNSIGNED)), 0)
+        FROM yuyuexinxi
+        WHERE yuyuedanhao LIKE CONCAT(#{dateStr}, '%')
+        ]]></select>
+
+    <!-- 查询指定时段内的座位预约记录（用于计算可预约区间） -->
+    <select id="selectBookingsInRange" resultType="com.entity.YuyuexinxiEntity" parameterType="map"><![CDATA[
+        SELECT *
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+          AND yuyue_start < #{dayEnd}
+          AND yuyue_end > #{dayStart}
+        ORDER BY yuyue_start
+        ]]></select>
+
+    <!-- 保留原有 view 查询 -->
+    <select id="selectListView" resultType="com.entity.view.YuyuexinxiView">
         SELECT yuyuexinxi.* FROM yuyuexinxi yuyuexinxi
         <where>1=1 ${ew.sqlSegment}</where>
     </select>
 
-    <select id="selectView"
-            resultType="com.entity.view.YuyuexinxiView">
+    <select id="selectView" resultType="com.entity.view.YuyuexinxiView">
         SELECT * FROM yuyuexinxi yuyuexinxi
         <where>1=1 ${ew.sqlSegment}</where>
     </select>
-
 
 </mapper>
