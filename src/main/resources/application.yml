@@ -12,7 +12,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver  # MySQL8.0+驱动（适配你的8.0版本）
     url: jdbc:mysql://192.168.0.101:3306/study_room?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
     username: root  # 你的数据库用户名
-    password: Study1234567  # 你的数据库密码
+    password: Study123456  # 你的数据库密码
 
   # 文件上传配置
   servlet:
