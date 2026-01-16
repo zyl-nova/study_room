@@ -8,8 +8,7 @@
         <result property="yuyuedanhao" column="yuyuedanhao"/>
         <result property="mingcheng" column="mingcheng"/>
         <result property="tupian" column="tupian"/>
-        <result property="yuyue_start" column="yuyue_start"/> <!-- 新增 -->
-        <result property="yuyue_end" column="yuyue_end"/>     <!-- 新增 -->
+        <result property="yuyueshijian" column="yuyueshijian"/>
         <result property="quxiaoshijian" column="quxiaoshijian"/>
         <result property="quxiaoyuanyin" column="quxiaoyuanyin"/>
         <result property="xuehao" column="xuehao"/>
@@ -17,6 +16,7 @@
         <result property="shouji" column="shouji"/>
         <result property="crossuserid" column="crossuserid"/>
         <result property="crossrefid" column="crossrefid"/>
+        <result property="sfsh" column="sfsh"/>
         <result property="shhf" column="shhf"/>
         <result property="userid" column="userid"/>
     </resultMap>

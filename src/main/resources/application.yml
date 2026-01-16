@@ -1,26 +1,46 @@
-# Tomcat
+# Tomcat服务器配置
 server:
+<<<<<<< HEAD
     tomcat:
         uri-encoding: UTF-8
     port: 8080
     servlet:
         context-path: /study_room
 
+=======
+  tomcat:
+    uri-encoding: UTF-8  # 解决Tomcat中文乱码
+  port: 8080  # 后端启动端口
+  servlet:
+    context-path: /study_room  # 项目上下文路径（核心！前端请求必须加这个前缀）
+>>>>>>> main
 
+# 数据库配置
 spring:
+<<<<<<< HEAD
     datasource:
         driverClassName: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://192.168.0.101:3306/study_room?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
         username: root
         password: Study123456
+=======
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver  # MySQL8.0+驱动（适配你的8.0版本）
+    url: jdbc:mysql://192.168.0.101:3306/study_room?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+    username: root  # 你的数据库用户名
+    password: Study123456  # 你的数据库密码
+>>>>>>> main
 
-    servlet:
-      multipart:
-        max-file-size: 300MB
-        max-request-size: 300MB
-    resources:
-      static-locations: classpath:static/,file:static/
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 300MB  # 单个文件最大大小
+      max-request-size: 300MB  # 单次请求最大文件大小
+  # 静态资源路径配置
+  resources:
+    static-locations: classpath:static/,file:static/
 
+<<<<<<< HEAD
     # 确保JSON解析器正常工作
     jackson:
         date-format: yyyy-MM-dd HH:mm:ss
@@ -47,28 +67,30 @@ management:
 # 如果你想显示更多信息，可加：management.endpoint.health.show-details=always
 
 #mybatis
+=======
+# MyBatis-Plus配置（核心：已开启下划线转驼峰）
+>>>>>>> main
 mybatis-plus:
-  mapper-locations: classpath*:mapper/*.xml
-  #实体扫描，多个package用逗号或者分号分隔
+  mapper-locations: classpath*:mapper/*.xml  # Mapper.xml文件路径
+  # 实体类扫描包（多个包用逗号分隔）
   typeAliasesPackage: com.entity
   global-config:
-    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    # 主键类型：1=用户输入ID（适配你的业务）
     id-type: 1
-    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    # 字段策略：1=非NULL判断（插入/更新时只处理非NULL字段）
     field-strategy: 1
-    #驼峰下划线转换
+    # 开启驼峰-下划线转换（和configuration层配置重复，双重保障）
     db-column-underline: true
-    #刷新mapper 调试神器
+    # 调试用：自动刷新mapper（开发环境建议开启）
     refresh-mapper: true
-    #逻辑删除配置
+    # 逻辑删除配置（-1=已删除，0=未删除）
     logic-delete-value: -1
     logic-not-delete-value: 0
-    #自定义SQL注入器
+    # 逻辑删除SQL注入器
     sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
   configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印SQL日志（方便排查）
-    cache-enabled: false
-    call-setters-on-nulls: true
-    #springboot 项目mybatis plus 设置 jdbcTypeForNull (oracle数据库需配置JdbcType.NULL, 默认是Other)
-    jdbc-type-for-null: 'null' 
+    map-underscore-to-camel-case: true  # 核心：开启下划线转驼峰（解决前端驼峰字段匹配问题）
+    cache-enabled: false  # 关闭二级缓存（避免数据不一致）
+    call-setters-on-nulls: true  # 显示NULL字段（前端不会出现undefined）
+    # MySQL兼容配置：NULL值处理
+    jdbc-type-for-null: 'null'

@@ -1,79 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.dao.YuyuexinxiDao">
 
-    <!-- 完整的resultMap：包含所有核心字段，移除废弃字段 -->
     <resultMap type="com.entity.YuyuexinxiEntity" id="yuyuexinxiMap">
-        <!-- 主键 -->
-        <result property="id" column="id"/>
-        <!-- 基础信息 -->
         <result property="yuyuedanhao" column="yuyuedanhao"/>
         <result property="mingcheng" column="mingcheng"/>
         <result property="tupian" column="tupian"/>
-        <result property="zixishiid" column="zixishiid"/>
         <result property="zuowei" column="zuowei"/>
-        <!-- 状态字段 -->
         <result property="qiandaozhuangtai" column="qiandaozhuangtai"/>
-        <result property="qiantuizhuangtai" column="qiantuizhuangtai"/>
-        <!-- 核心时间字段：数据库下划线 → 实体类驼峰 -->
-        <result property="yuyueStart" column="yuyue_start"/>
-        <result property="yuyueEnd" column="yuyue_end"/>
-        <!-- 其他字段 -->
+        <result property="yuyueshijian" column="yuyueshijian"/>
         <result property="beizhu" column="beizhu"/>
         <result property="xuehao" column="xuehao"/>
         <result property="xingming" column="xingming"/>
         <result property="shouji" column="shouji"/>
+        <result property="sfsh" column="sfsh"/>
         <result property="shhf" column="shhf"/>
-        <result property="addtime" column="addtime"/>
     </resultMap>
 
-    <!-- 原有列表查询：保留，无冲突 -->
+    <!-- 统计同一自习室 + 座位在请求时间段是否有冲突 -->
+    <select id="countSeatConflict" resultType="int" parameterType="map"><![CDATA[
+        SELECT COUNT(1)
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+          -- 时间区间重合判断：已有预约的开始 < 新预约结束 && 已有预约的结束 > 新预约开始
+          AND yuyue_start < #{yuyueEnd}
+          AND yuyue_end > #{yuyueStart}
+        ]]></select>
+
+    <!-- 查询指定座位的已预约时段 -->
+    <select id="selectSeatYuyueList" resultType="com.entity.YuyuexinxiEntity" parameterType="map"><![CDATA[
+        SELECT *
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+        ORDER BY yuyue_start
+        ]]></select>
+
+    <!-- 查询指定日期的预约单最大流水号（示例假设 yuyuedanhao 以 dateStr 开头，后跟流水） -->
+    <select id="getMaxYuyueSeqByDate" resultType="int" parameterType="string"><![CDATA[
+        SELECT COALESCE(MAX(CAST(SUBSTRING(yuyuedanhao, LENGTH(#{dateStr})+1) AS UNSIGNED)), 0)
+        FROM yuyuexinxi
+        WHERE yuyuedanhao LIKE CONCAT(#{dateStr}, '%')
+        ]]></select>
+
+    <!-- 查询指定时段内的座位预约记录（用于计算可预约区间） -->
+    <select id="selectBookingsInRange" resultType="com.entity.YuyuexinxiEntity" parameterType="map"><![CDATA[
+        SELECT *
+        FROM yuyuexinxi
+        WHERE zixishiid = #{zixishiid}
+          AND zuowei = #{zuowei}
+          AND yuyue_start < #{dayEnd}
+          AND yuyue_end > #{dayStart}
+        ORDER BY yuyue_start
+        ]]></select>
+
+    <!-- 保留原有 view 查询 -->
     <select id="selectListView" resultType="com.entity.view.YuyuexinxiView">
         SELECT yuyuexinxi.* FROM yuyuexinxi yuyuexinxi
         <where>1=1 ${ew.sqlSegment}</where>
     </select>
 
-    <!-- 原有详情查询：保留，无冲突 -->
     <select id="selectView" resultType="com.entity.view.YuyuexinxiView">
         SELECT * FROM yuyuexinxi yuyuexinxi
         <where>1=1 ${ew.sqlSegment}</where>
-    </select>
-
-    <!-- 修复：冲突检测SQL（简化逻辑，覆盖所有冲突场景） -->
-    <select id="countSeatConflict" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM yuyuexinxi
-        WHERE zixishiid = #{zixishiid}
-        AND zuowei = #{zuowei}
-        <!-- 核心：只要新预约时段和已有预约时段有交集，就是冲突 -->
-        AND yuyue_start &lt; #{yuyueEnd}
-        AND yuyue_end &gt; #{yuyueStart}
-    </select>
-
-    <!-- 修复：查询座位预约列表（使用完整resultMap，返回所有字段） -->
-    <select id="selectSeatYuyueList" resultMap="yuyuexinxiMap">
-        SELECT * FROM yuyuexinxi
-        WHERE zixishiid = #{zixishiid}
-        AND zuowei = #{zuowei}
-        AND yuyue_end &gt; NOW()  <!-- 只查未结束的预约 -->
-        ORDER BY yuyue_start ASC
-    </select>
-
-    <!-- 新增：查询指定日期的最大流水号 -->
-    <select id="getMaxYuyueSeqByDate" resultType="int">
-        SELECT COALESCE(MAX(SUBSTR(yuyuedanhao, 11, 3)), 0)
-        FROM yuyuexinxi
-        WHERE SUBSTR(yuyuedanhao, 3, 8) = #{dateStr}
-    </select>
-
-    <!-- 查询某座位在指定时间段内的预约（不包含已取消） -->
-    <select id="selectBookingsInRange" resultType="com.entity.YuyuexinxiEntity">
-        SELECT id, yuyue_start AS yuyueStart, yuyue_end AS yuyueEnd
-        FROM yuyuexinxi
-        WHERE zixishiid = #{zixishiid}
-          AND zuowei = #{zuowei}
-          AND yuyue_start &lt;#{dayEnd}
-          AND yuyue_end > #{dayStart}
-        ORDER BY yuyue_start ASC
     </select>
 
 </mapper>

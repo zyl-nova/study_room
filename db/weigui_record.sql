@@ -12,7 +12,11 @@ File Encoding         : 65001
 
 Date: 2025-12-19 03:16:44
 */
+<<<<<<< HEAD
 USE study_room; -- 先指定要操作的数据库
+=======
+
+>>>>>>> main
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `weigui_record`

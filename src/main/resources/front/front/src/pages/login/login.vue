@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-        class="container"
-        :style="{
+      class="container"
+      :style="{
         minHeight: '100vh',
         alignItems: 'center',
         background: '#f5f7fa',
@@ -13,9 +13,9 @@
       }"
     >
       <el-form
-          ref="loginForm"
-          :model="loginForm"
-          :style="{
+        ref="loginForm"
+        :model="loginForm"
+        :style="{
           padding: '40px 20px 20px',
           boxShadow: '0px 4px 10px 0px rgba(0,0,0,0.302)',
           borderRadius: '10px',
@@ -24,12 +24,12 @@
           height: 'auto',
           margin: '0 auto'
         }"
-          :rules="rules"
+        :rules="rules"
       >
         <!-- 标题：黑体加粗 -->
         <div
-            v-if="true"
-            :style="{
+          v-if="true"
+          :style="{
             width: '100%',
             margin: '0 0 20px 0',
             lineHeight: '44px',
@@ -42,14 +42,15 @@
         >
           智慧自习室预约系统 登录
         </div>
+
         <el-form-item
-            v-if="loginType == 1"
-            class="list-item"
-            :style="{ width: '80%', margin: '0 auto 10px' }"
-            prop="username"
+          v-if="loginType == 1"
+          class="list-item"
+          :style="{ width: '80%', margin: '0 auto 10px' }"
+          prop="username"
         >
           <input
-              :style="{
+            :style="{
               border: '1px solid #ddd',
               padding: '0 10px',
               color: '#000',
@@ -60,18 +61,19 @@
               borderRadius: '4px',
               outline: 'none'
             }"
-              v-model="loginForm.username"
-              placeholder="请输入账户"
+            v-model="loginForm.username"
+            placeholder="请输入账户"
           />
         </el-form-item>
+
         <el-form-item
-            v-if="loginType == 1"
-            class="list-item"
-            :style="{ width: '80%', margin: '0 auto 10px' }"
-            prop="password"
+          v-if="loginType == 1"
+          class="list-item"
+          :style="{ width: '80%', margin: '0 auto 10px' }"
+          prop="password"
         >
           <input
-              :style="{
+            :style="{
               border: '1px solid #ddd',
               padding: '0 10px',
               color: '#000',
@@ -82,22 +84,21 @@
               borderRadius: '4px',
               outline: 'none'
             }"
-              v-model="loginForm.password"
-              placeholder="请输入密码"
-              type="password"
+            v-model="loginForm.password"
+            placeholder="请输入密码"
+            type="password"
           />
         </el-form-item>
+
         <el-form-item
-            v-if="loginType == 1"
-            class="list-item"
-            :style="{ width: '80%', margin: '0 auto 10px' }"
-            prop="code"
+          v-if="loginType == 1"
+          class="list-item"
+          :style="{ width: '80%', margin: '0 auto 10px' }"
+          prop="code"
         >
-          <div
-              :style="{ display: 'flex', width: '100%', alignItems: 'center' }"
-          >
+          <div :style="{ display: 'flex', width: '100%', alignItems: 'center' }">
             <input
-                :style="{
+              :style="{
                 border: '1px solid #ddd',
                 padding: '0 10px',
                 color: '#000',
@@ -108,12 +109,12 @@
                 borderRadius: '4px',
                 outline: 'none'
               }"
-                v-model="loginForm.code"
-                placeholder="请输入验证码"
+              v-model="loginForm.code"
+              placeholder="请输入验证码"
             />
             <div
-                @click="randomString"
-                :style="{
+              @click="randomString"
+              :style="{
                 width: '35%',
                 cursor: 'pointer',
                 marginLeft: '5%',
@@ -127,13 +128,13 @@
               }"
             >
               <span
-                  v-for="(code, index) in codes"
-                  :key="index"
-                  :style="{
+                v-for="(code, index) in codes"
+                :key="index"
+                :style="{
                   color: code.color,
                   transform: code.rotate,
                   fontSize: code.size,
-                  fontWeight: 'bold',
+                  fontWeight: 'bold'
                 }"
               >
                 {{ code.num }}
@@ -141,26 +142,26 @@
             </div>
           </div>
         </el-form-item>
+
         <el-form-item
-            v-if="roles.length > 1"
-            class="list-type"
-            :style="{ width: '90%', textAlign: 'center', margin: '20px auto' }"
-            prop="role"
+          v-if="roles.length > 1"
+          class="list-type"
+          :style="{ width: '90%', textAlign: 'center', margin: '20px auto' }"
+          prop="role"
         >
           <el-radio
-              v-model="loginForm.tableName"
-              :label="item.tableName"
-              v-for="(item, index) in roles"
-              :key="index"
-              @change.native="getCurrentRow(item)"
-          >{{ item.roleName }}</el-radio
-          >
+            v-model="loginForm.tableName"
+            :label="item.tableName"
+            v-for="(item, index) in roles"
+            :key="index"
+            @change.native="getCurrentRow(item)"
+          >{{ item.roleName }}</el-radio>
         </el-form-item>
+
         <el-form-item :style="{ width: '80%', margin: '20px auto' }">
-          <!-- 登录按钮：改为图片中的浅蓝色 -->
           <el-button
-              v-if="loginType == 1"
-              :style="{
+            v-if="loginType == 1"
+            :style="{
               border: '0',
               cursor: 'pointer',
               padding: '0 24px',
@@ -168,18 +169,18 @@
               outline: 'none',
               color: '#fff',
               borderRadius: '8px',
-              background: '#78ABC3', /* 图片中的浅蓝色 */
+              background: '#78ABC3',
               width: '100%',
               fontSize: '16px',
               height: '48px',
               fontWeight: '500'
             }"
-              @click="submitForm('loginForm')"
-          >登录</el-button
-          >
+            @click="submitForm('loginForm')"
+          >登录</el-button>
+
           <el-button
-              v-if="loginType == 1"
-              :style="{
+            v-if="loginType == 1"
+            :style="{
               border: '0',
               cursor: 'pointer',
               padding: '0 24px',
@@ -191,19 +192,19 @@
               display: 'none',
               width: 'auto',
               fontSize: '14px',
-              height: '44px',
+              height: '44px'
             }"
-              @click="resetForm('loginForm')"
-          >重置</el-button
-          >
+            @click="resetForm('loginForm')"
+          >重置</el-button>
+
           <el-upload
-              v-if="loginType == 2"
-              :action="baseUrl + 'file/upload'"
-              :show-file-list="false"
-              :on-success="faceLogin"
+            v-if="loginType == 2"
+            :action="baseUrl + 'file/upload'"
+            :show-file-list="false"
+            :on-success="faceLogin"
           >
             <el-button
-                :style="{
+              :style="{
                 border: '0',
                 cursor: 'pointer',
                 padding: '0 24px',
@@ -214,15 +215,14 @@
                 background: '#1746D4',
                 width: '100%',
                 fontSize: '14px',
-                height: '44px',
+                height: '44px'
               }"
-            >人脸识别登录</el-button
-            >
+            >人脸识别登录</el-button>
           </el-upload>
         </el-form-item>
-        <!-- 注册学生按钮：美化 -->
+
         <div
-            :style="{
+          :style="{
             width: '100%',
             margin: '20px auto',
             display: 'flex',
@@ -230,7 +230,7 @@
           }"
         >
           <router-link
-              :style="{
+            :style="{
               cursor: 'pointer',
               color: '#78ABC3',
               textAlign: 'center',
@@ -242,14 +242,11 @@
               fontWeight: '500',
               transition: 'all 0.2s'
             }"
-              :to="{
+            :to="{
               path: '/register',
-              query: { role: 'xuesheng', pageFlag: 'register' },
+              query: { role: 'xuesheng', pageFlag: 'register' }
             }"
-              @mouseenter="style={background: 'rgba(120, 171, 195, 0.2)'}"
-              @mouseleave="style={background: 'rgba(120, 171, 195, 0.1)'}"
-          >注册学生</router-link
-          >
+          >注册学生</router-link>
         </div>
       </el-form>
     </div>
@@ -258,7 +255,6 @@
 
 <script>
 export default {
-  //数据集合
   data() {
     return {
       baseUrl: this.$config.baseUrl || '/study_room/',
@@ -360,7 +356,7 @@ export default {
           ],
           hasBackLogin: "是",
           hasBackRegister: "否",
-          hasFrontLogin: "是", // 关键修改：管理员显示在登录角色列表
+          hasFrontLogin: "是",
           hasFrontRegister: "否",
           roleName: "管理员",
           tableName: "users",
@@ -429,7 +425,7 @@ export default {
       loginForm: {
         username: "",
         password: "",
-        tableName: "xuesheng", // 默认选择学生
+        tableName: "xuesheng",
         code: "",
       },
       role: "",
@@ -440,30 +436,10 @@ export default {
         code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
       codes: [
-        {
-          num: 1,
-          color: "#000",
-          rotate: "10deg",
-          size: "16px",
-        },
-        {
-          num: 2,
-          color: "#000",
-          rotate: "10deg",
-          size: "16px",
-        },
-        {
-          num: 3,
-          color: "#000",
-          rotate: "10deg",
-          size: "16px",
-        },
-        {
-          num: 4,
-          color: "#000",
-          rotate: "10deg",
-          size: "16px",
-        },
+        { num: 1, color: "#000", rotate: "10deg", size: "16px" },
+        { num: 2, color: "#000", rotate: "10deg", size: "16px" },
+        { num: 3, color: "#000", rotate: "10deg", size: "16px" },
+        { num: 4, color: "#000", rotate: "10deg", size: "16px" },
       ],
       generatedCode: ""
     };
@@ -475,29 +451,18 @@ export default {
         this.roles.push(this.roleMenus[item]);
       }
     }
-    // 设置默认角色
     if (this.roles.length > 0) {
       this.loginForm.tableName = this.roles[0].tableName;
       this.role = this.roles[0].roleName;
     }
-
-    // 调试日志
-    console.log('登录页面初始化完成');
-    console.log('baseUrl配置:', this.$config?.baseUrl);
-    console.log('$http对象是否存在:', !!this.$http);
   },
-  mounted() {},
-  //方法集合
   methods: {
     randomString() {
       const len = 4;
       const chars = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-        'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-        'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2',
-        '3', '4', '5', '6', '7', '8', '9'
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+        'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+        '0','1','2','3','4','5','6','7','8','9'
       ];
       const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFA500', '#800080'];
       const sizes = ['18px', '20px', '22px'];
@@ -524,13 +489,12 @@ export default {
       this.codes = newCodes;
       this.generatedCode = codeStr.toLowerCase();
     },
+
     getCurrentRow(row) {
       this.role = row.roleName;
     },
-    submitForm(formName) {
-      console.log('开始登录提交...');
 
-      // 验证码校验
+    submitForm(formName) {
       const inputCode = this.loginForm.code.toLowerCase();
       if (inputCode !== this.generatedCode) {
         this.$message.error('验证码输入错误');
@@ -538,7 +502,6 @@ export default {
         return;
       }
 
-      // 角色选择校验
       if (this.roles.length != 1) {
         if (!this.role) {
           this.$message.error("请选择登录用户类型");
@@ -549,23 +512,36 @@ export default {
         this.loginForm.tableName = this.roles[0].tableName;
       }
 
-      // 表单验证
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log('表单验证通过，开始发送登录请求');
-          console.log('登录参数:', this.loginForm);
+        if (!valid) return false;
 
-          // 关键修复：移除有问题的代码行
-          // 注释掉或删除导致错误的代码：
-          // console.log('完整请求地址:', this.$http.defaults.baseURL ? this.$http.defaults.baseURL + requestUrl : requestUrl);
+        const baseUrl = this.$config?.baseUrl || '/study_room/';
+        const requestUrl = `${baseUrl}${this.loginForm.tableName}/login`;
 
-          // 构建安全的请求URL
-          const baseUrl = this.$config?.baseUrl || '/study_room/';
-          const requestUrl = `${baseUrl}${this.loginForm.tableName}/login`;
+        this.$http
+          .post(requestUrl, null, {
+            params: {
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+              tableName: this.loginForm.tableName
+            },
+          })
+          .then((res) => {
+            if (res.data && res.data.code === 0) {
+              const token =
+                res.data.token ||
+                res.data.data?.token ||
+                '';
 
-          console.log('登录请求URL:', requestUrl);
-          console.log('请求方法: POST');
+              // 学生端自己的 localStorage
+              localStorage.setItem("Token", token);
+              localStorage.setItem("UserTableName", this.loginForm.tableName);
+              localStorage.setItem("username", this.loginForm.username);
+              localStorage.setItem("adminName", this.loginForm.username);
+              localStorage.setItem("sessionTable", this.loginForm.tableName);
+              localStorage.setItem("role", this.role);
 
+<<<<<<< HEAD
           // 发送登录请求
           this.$http
               .post(requestUrl, null, {
@@ -628,13 +604,73 @@ export default {
                 } else {
                   this.$message.error("请求配置错误");
                 }
+=======
+              // 你原本的学号逻辑保留
+              let gotXuehao = null;
+              if (res.data.xuehao) gotXuehao = res.data.xuehao;
+              else if (res.data.data && res.data.data.xuehao) gotXuehao = res.data.data.xuehao;
+              else if (res.data.user && res.data.user.xuehao) gotXuehao = res.data.user.xuehao;
+              else if (res.data.userInfo && res.data.userInfo.xuehao) gotXuehao = res.data.userInfo.xuehao;
+              else if (/^\d{6,12}$/.test(String(this.loginForm.username))) gotXuehao = this.loginForm.username;
+
+              if (gotXuehao) {
+                localStorage.setItem('xuehao', String(gotXuehao));
+              }
+
+              this.$message({
+                message: "登录成功",
+                type: "success",
+                duration: 1500,
+>>>>>>> main
               });
-        } else {
-          console.log('表单验证失败');
-          return false;
-        }
+
+              // ✅ 关键修复：管理员跳转必须去 /index?token=...
+              setTimeout(() => {
+                const ADMIN_INDEX = "http://localhost:8082/#/index";
+                const STUDENT_HOME = "http://localhost:8081/#/index/home";
+
+                // 学生端登录成功后本地保存的 Token
+                const token = localStorage.getItem("Token") || "";
+
+                if (this.loginForm.tableName === "users") {
+                  // ✅ 管理员：把 token + 角色信息一起带给 8082
+                  const adminName = this.loginForm.username || "";
+
+                  const url =
+                    `${ADMIN_INDEX}?token=${encodeURIComponent(token)}` +
+                    `&role=${encodeURIComponent("管理员")}` +
+                    `&sessionTable=${encodeURIComponent("users")}` +
+                    `&adminName=${encodeURIComponent(adminName)}`;
+
+                  window.location.replace(url);
+                } else {
+                  // 学生：优先跳回之前想去的页面（如果有）
+                  const redirect = this.$route.query && this.$route.query.redirect;
+                  if (redirect) {
+                    this.$router.replace(redirect);
+                  } else {
+                    window.location.replace(STUDENT_HOME);
+                  }
+                }
+              }, 800);
+
+
+            } else {
+              this.$message.error(res.data.msg || "登录失败");
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              this.$message.error(`服务器错误: ${error.response.status}`);
+            } else if (error.request) {
+              this.$message.error("无法连接到服务器，请检查后端是否运行");
+            } else {
+              this.$message.error("请求配置错误");
+            }
+          });
       });
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },

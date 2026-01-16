@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
+=======
+import javax.validation.Valid;
+>>>>>>> main
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.entity.StudyDurationRanking;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 import java.util.List;
 import java.util.Map;
 

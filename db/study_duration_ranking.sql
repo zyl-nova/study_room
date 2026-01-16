@@ -1,5 +1,8 @@
 -- MySQL版本（如果用SQL Server，语法稍作调整）
+<<<<<<< HEAD
 USE study_room; -- 先指定要操作的数据库
+=======
+>>>>>>> main
 CREATE TABLE study_duration_ranking (
     student_id VARCHAR(9) NOT NULL COMMENT '学号（主键）',
     name VARCHAR(50) NOT NULL COMMENT '学生姓名',
